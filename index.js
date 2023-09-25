@@ -8,6 +8,8 @@ const readline = require('readline');
 //[ ] add scoreboard
 //[ ] DRY in playerMakeMoveSelection()
 //[ ] push to Github
+//[ ] add  spaces or clear console to make the printouts more readable
+//[ ] check for a tie
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -38,12 +40,42 @@ const bottomLeft = 63
 const bottomMiddle = 68
 const bottomRight = 72
 
-//add board piece position
-// board = board.substring(0, middleMiddle) + 'X' + board.substring(middleMiddle + 1);
-// console.log(board)
-
 
 console.log('Welcome to TicTacToe!')
+
+const checkIfGameWon = () => {
+    const winningCombonations = {
+        topRow: [topLeft, topMiddle, topRight],
+        middleRow: [middleLeft, middleMiddle, middleRight],
+        bottomRow: [bottomLeft, bottomMiddle, bottomRight],
+        firstColumn: [topLeft, middleLeft, bottomLeft],
+        secondColumn: [topMiddle, middleMiddle, bottomMiddle],
+        thirdColumn: [topRight, middleRight, bottomRight],
+        leftDiagonal: [topLeft, middleMiddle, bottomRight],
+        rightDiagonal: [topRight, middleMiddle, bottomLeft]
+    }
+
+    for (let combo in winningCombonations) {
+       if (board[winningCombonations[combo][0]] === 'X' && board[winningCombonations[combo][1]] === 'X' && board[winningCombonations[combo][2]] === 'X') {
+            if (playerGamePiece === 'X') {
+                console.log(`GAME OVER! ${playerName} WINS!`)
+                return true
+            } else {
+                console.log('GAME OVER! COMPUTER WINS! BETTER LUCK NEXT TIME!')
+                return true
+            }
+       } else if (board[winningCombonations[combo][0]] === 'O' && board[winningCombonations[combo][1]] === 'O' && board[winningCombonations[combo][2]] === 'O') {
+            if (playerGamePiece === 'O') {
+                console.log(`GAME OVER! ${playerName} WINS!`)
+                return true
+            } else {
+                console.log('GAME OVER! COMPUTER WINS! BETTER LUCK NEXT TIME!')
+                return true
+            }
+       }
+    }
+    return false
+}
 
 const computerMakeMoveSelection = () => {
     const possibleMoves = [topLeft, topMiddle, topRight, middleLeft, middleMiddle, middleRight, bottomLeft, bottomMiddle, bottomRight]
@@ -62,13 +94,18 @@ const playerMove = (move) => {
     board = board.substring(0, move) + playerGamePiece + board.substring(move + 1)
     console.log(`${playerName}'s turn:`)
     console.log(board)
+    if (checkIfGameWon()) {
+        return
+    }
     computerMakeMoveSelection()
     setTimeout(() => {
         console.log(`Computer's turn:`)
         console.log(board)
         playerMakeMoveSelection()
     }, 800)
-
+    if (checkIfGameWon()) {
+        return
+    }
  
 }
 
@@ -104,7 +141,7 @@ const playerMakeMoveSelection = () => {
               break
             default:
               console.log('Please submit a valid move.')
-              makeMoveSelection()
+              playerMakeMoveSelection()
         }
               
     })
