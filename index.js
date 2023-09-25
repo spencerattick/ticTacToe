@@ -10,6 +10,7 @@ const readline = require('readline');
 //[ ] push to Github
 //[ ] add  spaces or clear console to make the printouts more readable
 //[ ] check for a tie
+//[ ] add test suite
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -27,6 +28,8 @@ let board  =
 --------------
     |    |   
 `
+let playerScore = 0
+let computerScore = 0
 //board piece positions
 const topLeft = 3
 const topMiddle = 8
@@ -42,6 +45,26 @@ const bottomRight = 72
 
 
 console.log('Welcome to TicTacToe!')
+
+const wantToPlayAgain = () => {
+    rl.question('Would you like to play again? ', (answer) => {
+        if (answer.toUpperCase() === 'YES') {
+            board  = 
+`
+    |    |    
+--------------
+    |    |    
+--------------
+    |    |   
+`
+                console.log(board)
+                playerMakeMoveSelection()
+        } else if (answer.toUpperCase() === 'NO') {
+            console.log('Ok, see you next time!')
+            rl.close()
+        }
+    })
+}
 
 const checkIfGameWon = () => {
     const winningCombonations = {
@@ -59,17 +82,29 @@ const checkIfGameWon = () => {
        if (board[winningCombonations[combo][0]] === 'X' && board[winningCombonations[combo][1]] === 'X' && board[winningCombonations[combo][2]] === 'X') {
             if (playerGamePiece === 'X') {
                 console.log(`GAME OVER! ${playerName} WINS!`)
+                playerScore++
+                console.log(`The score is ${playerName.toUpperCase()}: ${playerScore} and COMPUTER: ${computerScore}`)
+                wantToPlayAgain()
                 return true
             } else {
                 console.log('GAME OVER! COMPUTER WINS! BETTER LUCK NEXT TIME!')
+                computerScore++
+                console.log(`The score is ${playerName.toUpperCase()}: ${playerScore} and COMPUTER: ${computerScore}`)
+                wantToPlayAgain()
                 return true
             }
        } else if (board[winningCombonations[combo][0]] === 'O' && board[winningCombonations[combo][1]] === 'O' && board[winningCombonations[combo][2]] === 'O') {
             if (playerGamePiece === 'O') {
                 console.log(`GAME OVER! ${playerName} WINS!`)
+                playerScore++
+                console.log(`The score is ${playerName.toUpperCase()}: ${playerScore} and COMPUTER: ${computerScore}`)
+                wantToPlayAgain()
                 return true
             } else {
                 console.log('GAME OVER! COMPUTER WINS! BETTER LUCK NEXT TIME!')
+                computerScore++
+                console.log(`The score is ${playerName.toUpperCase()}: ${playerScore} and COMPUTER: ${computerScore}`)
+                wantToPlayAgain()
                 return true
             }
        }
