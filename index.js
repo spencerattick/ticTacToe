@@ -126,6 +126,11 @@ const computerMakeMoveSelection = () => {
 }
 
 const playerMove = (move) => {
+    if (board[move] === 'X' || board[move] === ['O']) {
+        console.log('THAT SPACE IS TAKEN! Please make a different selection.')
+        playerMakeMoveSelection()
+        return
+    }
     board = board.substring(0, move) + playerGamePiece + board.substring(move + 1)
     console.log(`${playerName}'s turn:`)
     console.log(board)
