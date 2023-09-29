@@ -37,8 +37,26 @@ class Player {
 }
 
 class ComputerPlayer {
-    constructor(gamePiece) {
+    constructor(gamePiece, board) {
         this.gamePiece = gamePiece
+        this.board = board
+    }
+
+    computerMakeMove(board) {
+        return new Promise((resolve) => {
+            const possibleMoves = [board.topLeft, board.topMiddle, board.topRight, board.middleLeft, board.middleMiddle, board.middleRight, board.board.bottomLeft, board.bottomMiddle, board.bottomRight]
+
+            const randomIndex =  Math.floor(Math.random() * possibleMoves.length)
+            const move = possibleMoves[randomIndex]
+        
+            if (board.board[move] !== 'X' && board.board[move] !== 'O') {
+                board.board = board.board.substring(0, move) + this.gamePiece + board.board.substring(move + 1)
+                console.log(board.board)
+                resolve()
+            } else {
+              this.computerMakeMove(board)
+            }
+        })
     }
 
 }
@@ -95,7 +113,6 @@ class Board {
     }
 
     makeMove(playerGamePiece, playerName) {
-        console.log("MAKE MOVE")
         return new Promise((resolve) => {
             rl.question('Your turn! Choose from the following options: TOP LEFT, TOP MIDDLE, TOP RIGHT, MIDDLE LEFT, CENTER, MIDDLE RIGHT, BOTTOM RIGHT, BOTTOM MIDDLE, BOTTOM RIGHT. ', (answer) => {
                 switch (answer.toUpperCase()) {
@@ -128,7 +145,7 @@ class Board {
                       break
                     default:
                       console.log('Please submit a valid move.')
-                      playerMakeMoveSelection()
+                      this.makeMove(playerGamePiece, playerName)
                 }
                       
             })
@@ -155,15 +172,24 @@ class Game {
     constructor(playerName) {
         this.playerName = playerName
         this.player = new Player(playerName)
-        this.computer = new ComputerPlayer()
         this.board = new Board()
         this.playerGamePiece = null
+        this.computerGamePiece = null
     }
 
-    async start() {
+    async play() {
         this.playerGamePiece = await this.player.chooseGamePiece()
+        if (this.playerGamePiece === 'X') {
+            this.computerGamePiece = 'O'
+        } else {
+            this.computerGamePiece = 'X'
+        }
+        this.computer = new ComputerPlayer(this.computerGamePiece, this.board)
         console.log(this.board.board)
         await this.board.makeMove(this.playerGamePiece, this.playerName)
+        await this.computer.computerMakeMove(this.board)
+        //need to check for end of game either by winning or tie
+        //while game isn't over - keep having players make moves
     }
 
     end() {
@@ -177,7 +203,7 @@ const startGame = () => {
         console.log(`Hello, ${answer}!`);
 
         const game = new Game(playerName);
-        game.start();
+        game.play();
     });
 };
 
