@@ -45,7 +45,7 @@ class ComputerPlayer {
 
 class Board {
     constructor() {
-        this.board =
+        this.board  = 
         `
             |    |    
         --------------
@@ -53,17 +53,17 @@ class Board {
         --------------
             |    |   
         `
-        this.topLeft = 3
-        this.topMiddle = 8
-        this.topRight = 12
+        this.topLeft = 10
+        this.topMiddle = 15
+        this.topRight = 20
 
-        this.middleLeft = 33
-        this.middleMiddle = 38
-        this.middleRight = 42
+        this.middleLeft = 57
+        this.middleMiddle = 62
+        this.middleRight = 66
 
-        this.bottomLeft = 63
-        this.bottomMiddle = 68
-        this.bottomRight = 72
+        this.bottomLeft = 103
+        this.bottomMiddle = 108
+        this.bottomRight = 112
     }
 
     test() {
